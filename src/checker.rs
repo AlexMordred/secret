@@ -51,25 +51,25 @@ impl Checker {
         COMMON_PASSWORDS.contains(&password.as_str())
     }
 
-    fn has_small_letters(&self, password: &String) -> bool {
+    pub fn has_small_letters(&self, password: &String) -> bool {
         let re = Regex::new(r"[a-z]").unwrap();
 
         re.is_match(&password)
     }
 
-    fn has_capital_letters(&self, password: &String) -> bool {
+    pub fn has_capital_letters(&self, password: &String) -> bool {
         let re = Regex::new(r"[A-Z]").unwrap();
 
         re.is_match(&password)
     }
 
-    fn has_numbers(&self, password: &String) -> bool {
+    pub fn has_numbers(&self, password: &String) -> bool {
         let re = Regex::new(r"[0-9]").unwrap();
 
         re.is_match(&password)
     }
 
-    fn has_special_chars(&self, password: &String) -> bool {
+    pub fn has_special_chars(&self, password: &String) -> bool {
         let re = Regex::new(r"[^a-zA-Z0-9]").unwrap();
 
         re.is_match(&password)

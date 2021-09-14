@@ -1,17 +1,19 @@
 mod checker;
+mod generator;
 
 use checker::Checker;
+use generator::Generator;
 
 pub struct Password {
     pub checker: Checker,
-    pub generator: bool,
+    pub generator: Generator,
 }
 
 impl Password {
     fn new() -> Self {
         Self {
             checker: Checker::new(),
-            generator: true,
+            generator: Generator::new(),
         }
     }
 }

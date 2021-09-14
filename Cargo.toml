@@ -13,3 +13,4 @@ path = "src/main.rs"
 
 [dependencies]
 regex = "1.5"
+rand = "0.8.0"
