@@ -19,7 +19,7 @@ impl Password {
         }
     }
 
-    pub fn check(&self, password: &String) -> Strength {
+    pub fn check(&self, password: &str) -> Strength {
         self.checker.check(password)
     }
 
@@ -41,7 +41,7 @@ mod tests {
     fn proxying_call_to_the_checker_check_method() {
         let password = Password::new();
 
-        password.check(&String::from("qwerty"));
+        password.check("qwerty");
     }
 
     #[test]

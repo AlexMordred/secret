@@ -45,14 +45,14 @@ impl Generator {
         charset
     }
 
-    fn validate_password(&self, password: &String, options: &Options) -> bool {
+    fn validate_password(&self, password: &str, options: &Options) -> bool {
         let checker = Checker::new();
 
         if
-            (options.small_letters && !checker.has_small_letters(&password)) ||
-            (options.capital_letters && !checker.has_capital_letters(&password)) ||
-            (options.numbers && !checker.has_numbers(&password)) ||
-            (options.special_chars && !checker.has_special_chars(&password))
+            (options.small_letters && !checker.has_small_letters(password)) ||
+            (options.capital_letters && !checker.has_capital_letters(password)) ||
+            (options.numbers && !checker.has_numbers(password)) ||
+            (options.special_chars && !checker.has_special_chars(password))
         {
             return false
         }
