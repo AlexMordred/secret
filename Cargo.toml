@@ -1,10 +1,10 @@
 [package]
-name = "password"
+name = "secret"
 version = "0.1.0"
 edition = "2018"
 
 [lib]
-name = "password"
+name = "secret"
 path = "src/lib.rs"
 
 [[bin]]

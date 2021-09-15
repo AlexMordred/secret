@@ -1,5 +1,5 @@
 use clap::{App, Arg, ArgMatches, SubCommand};
-use password::{Password, Strength, Options};
+use secret::{Password, Strength, Options};
 
 const ARG_PASSWORD: &str = "password";
 const ARG_LENGTH: &str = "length";
@@ -19,6 +19,7 @@ fn make_app() -> App<'static, 'static> {
         .about("Random password generator and password strength checker")
         .subcommand(
             SubCommand::with_name(COMMAND_CHECK)
+                .about("Check password strength")
                 .arg(
                     Arg::with_name(ARG_PASSWORD)
                         .required(true)
@@ -27,6 +28,7 @@ fn make_app() -> App<'static, 'static> {
         )
         .subcommand(
             SubCommand::with_name(COMMAND_GENERATE)
+                .about("Generate a random password")
                 .arg(
                     Arg::with_name(ARG_LENGTH)
                         .required(true)
@@ -43,7 +45,7 @@ fn make_app() -> App<'static, 'static> {
 }
 
 fn die(message: &str) -> ! {
-    println!("{}{}{}", COLOR_RED, message, COLOR_RESET);
+    println!("{}", message);
 
     std::process::exit(1);
 }
@@ -105,6 +107,12 @@ fn main() {
             generate_password(args.subcommand_matches(COMMAND_GENERATE).unwrap())
         },
         Some(_) => die("Invalid argument"),
-        None => die("Not enough arguments")
+        None => {
+            die(format!(
+                "Not enough arguments. For more information try {}--help{}",
+                COLOR_GREEN,
+                COLOR_RESET
+            ).as_str())
+        }
     };
 }
