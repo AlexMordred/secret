@@ -4,6 +4,7 @@ mod generator;
 use checker::Checker;
 pub use checker::Strength;
 use generator::Generator;
+pub use generator::Options;
 
 pub struct Password {
     pub checker: Checker,
@@ -21,6 +22,10 @@ impl Password {
     pub fn check(&self, password: &String) -> Strength {
         self.checker.check(password)
     }
+
+    pub fn generate(&self, options: Options) -> String {
+        self.generator.generate(options)
+    }
 }
 
 #[cfg(test)]
@@ -37,5 +42,12 @@ mod tests {
         let password = Password::new();
 
         password.check(&String::from("qwerty"));
+    }
+
+    #[test]
+    fn proxying_call_to_the_generator_generate_method() {
+        let password = Password::new();
+
+        password.generate(Options::default());
     }
 }

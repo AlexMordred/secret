@@ -1,8 +1,9 @@
-use clap::{App, Arg, ArgMatches};
-use password::{Password, Strength};
+use clap::{App, Arg, ArgMatches, SubCommand};
+use password::{Password, Strength, Options};
 
-const ARG_COMMAND: &str = "command";
 const ARG_PASSWORD: &str = "password";
+const ARG_LENGTH: &str = "length";
+const ARG_FORMAT: &str = "format";
 
 const COMMAND_CHECK: &str = "check";
 const COMMAND_GENERATE: &str = "generate";
@@ -16,24 +17,38 @@ fn make_app() -> App<'static, 'static> {
     App::new("Secret")
         .version(env!("CARGO_PKG_VERSION"))
         .about("Random password generator and password strength checker")
-        .arg(
-            Arg::with_name(ARG_COMMAND)
-                .required(true)
-                .possible_values(&[COMMAND_CHECK, COMMAND_GENERATE])
+        .subcommand(
+            SubCommand::with_name(COMMAND_CHECK)
+                .arg(
+                    Arg::with_name(ARG_PASSWORD)
+                        .required(true)
+                        .help("Password to be checked")
+                )
         )
-        .arg(
-            Arg::with_name(ARG_PASSWORD)
-                .required_if(ARG_COMMAND, COMMAND_CHECK)
+        .subcommand(
+            SubCommand::with_name(COMMAND_GENERATE)
+                .arg(
+                    Arg::with_name(ARG_LENGTH)
+                        .required(true)
+                        .help("Length of the password to be generated")
+                        .default_value("16")
+                )
+                .arg(
+                    Arg::with_name(ARG_FORMAT)
+                        .required(true)
+                        .help("Characters to be included in the generated password (in any order). a - small letters; A - capital letters; 1 - numbers; @ - special characters.")
+                        .default_value("aA1@")
+                )
         )
 }
 
 fn die(message: &str) -> ! {
-    println!("{}", message);
+    println!("{}{}{}", COLOR_RED, message, COLOR_RESET);
 
     std::process::exit(1);
 }
 
-fn check_password(args: ArgMatches) {
+fn check_password(args: &ArgMatches) {
     let password = Password::new();
     let pwd = args.value_of(ARG_PASSWORD).unwrap().to_string();
 
@@ -53,12 +68,43 @@ fn check_password(args: ArgMatches) {
     println!("Your password is: {}{}{}", color, strength, COLOR_RESET);
 }
 
+fn generate_password(args: &ArgMatches) {
+    let password = Password::new();
+
+    let length = args.value_of(ARG_LENGTH).unwrap().parse::<u8>();
+    if length.is_err() {
+        die("Password can only be between 4 and 255 characters long")
+    }
+
+    let length = length.unwrap();
+    if length < 4 {
+        die("Password can only be between 4 and 255 characters long")
+    }
+
+    let format = args.value_of(ARG_FORMAT).unwrap();
+
+    let options = Options {
+        length,
+        small_letters: format.contains('a'),
+        capital_letters: format.contains('A'),
+        numbers: format.contains('1'),
+        special_chars: format.contains('@'),
+    };
+
+    println!("{}", password.generate(options));
+}
+
 fn main() {
     let args = make_app().get_matches();
 
-    match args.value_of(ARG_COMMAND) {
-        Some(COMMAND_CHECK) => check_password(args),
-        Some(_) => die("Not enough arguments"),
+    match args.subcommand_name() {
+        Some(COMMAND_CHECK) => {
+            check_password(args.subcommand_matches(COMMAND_CHECK).unwrap())
+        },
+        Some(COMMAND_GENERATE) => {
+            generate_password(args.subcommand_matches(COMMAND_GENERATE).unwrap())
+        },
+        Some(_) => die("Invalid argument"),
         None => die("Not enough arguments")
     };
 }

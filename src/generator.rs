@@ -6,13 +6,13 @@ const CAPITAL_LETTERS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const NUMBERS: &str = "0123456789";
 const SPECIAL_CHARS: &str = "`~!@#$%^&*()-_=+\\/;:'\",.?<>[]{}|";
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Options {
-    length: u8,
-    small_letters: bool,
-    capital_letters: bool,
-    numbers: bool,
-    special_chars: bool,
+    pub length: u8,
+    pub small_letters: bool,
+    pub capital_letters: bool,
+    pub numbers: bool,
+    pub special_chars: bool,
 }
 
 impl Default for Options {
@@ -61,7 +61,6 @@ impl Generator {
     }
 
     pub fn generate(&self, options: Options) -> String {
-        let checker = Checker::new();
         let mut password = String::with_capacity(options.length as usize);
         let mut rng = rand::thread_rng();
         let charset: String = self.charset_for_options(options);
