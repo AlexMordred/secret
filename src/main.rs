@@ -1,5 +1,5 @@
 use clap::{App, Arg, ArgMatches, SubCommand};
-use secret::{Password, Strength, Options};
+use secret::{Options, Password, Strength};
 
 const ARG_PASSWORD: &str = "password";
 const ARG_LENGTH: &str = "length";
@@ -100,19 +100,15 @@ fn main() {
     let args = make_app().get_matches();
 
     match args.subcommand_name() {
-        Some(COMMAND_CHECK) => {
-            check_password(args.subcommand_matches(COMMAND_CHECK).unwrap())
-        },
+        Some(COMMAND_CHECK) => check_password(args.subcommand_matches(COMMAND_CHECK).unwrap()),
         Some(COMMAND_GENERATE) => {
             generate_password(args.subcommand_matches(COMMAND_GENERATE).unwrap())
-        },
-        Some(_) => die("Invalid argument"),
-        None => {
-            die(format!(
-                "Not enough arguments. For more information try {}--help{}",
-                COLOR_GREEN,
-                COLOR_RESET
-            ).as_str())
         }
+        Some(_) => die("Invalid argument"),
+        None => die(format!(
+            "Not enough arguments. For more information try {}--help{}",
+            COLOR_GREEN, COLOR_RESET
+        )
+        .as_str()),
     };
 }

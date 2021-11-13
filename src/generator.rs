@@ -1,5 +1,5 @@
-use rand::Rng;
 use super::checker::Checker;
+use rand::Rng;
 
 const SMALL_LETTERS: &str = "abcdefghijklmnopqrstuvwxyz";
 const CAPITAL_LETTERS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -37,10 +37,18 @@ impl Generator {
     fn charset_for_options(&self, options: Options) -> String {
         let mut charset = String::new();
 
-        if options.small_letters { charset.push_str(SMALL_LETTERS) };
-        if options.capital_letters { charset.push_str(CAPITAL_LETTERS) };
-        if options.numbers { charset.push_str(NUMBERS) };
-        if options.special_chars { charset.push_str(SPECIAL_CHARS) };
+        if options.small_letters {
+            charset.push_str(SMALL_LETTERS)
+        };
+        if options.capital_letters {
+            charset.push_str(CAPITAL_LETTERS)
+        };
+        if options.numbers {
+            charset.push_str(NUMBERS)
+        };
+        if options.special_chars {
+            charset.push_str(SPECIAL_CHARS)
+        };
 
         charset
     }
@@ -48,13 +56,12 @@ impl Generator {
     fn validate_password(&self, password: &str, options: &Options) -> bool {
         let checker = Checker::new();
 
-        if
-            (options.small_letters && !checker.has_small_letters(password)) ||
-            (options.capital_letters && !checker.has_capital_letters(password)) ||
-            (options.numbers && !checker.has_numbers(password)) ||
-            (options.special_chars && !checker.has_special_chars(password))
+        if (options.small_letters && !checker.has_small_letters(password))
+            || (options.capital_letters && !checker.has_capital_letters(password))
+            || (options.numbers && !checker.has_numbers(password))
+            || (options.special_chars && !checker.has_special_chars(password))
         {
-            return false
+            return false;
         }
 
         true

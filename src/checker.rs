@@ -1,10 +1,6 @@
 use regex::Regex;
 
-const COMMON_PASSWORDS: [&str; 3] = [
-    "qwerty",
-    "password",
-    "secret",
-];
+const COMMON_PASSWORDS: [&str; 3] = ["qwerty", "password", "secret"];
 
 #[derive(Debug, PartialEq)]
 pub enum Strength {
@@ -27,10 +23,18 @@ impl Checker {
 
         let mut char_types: u8 = 0;
 
-        if self.has_small_letters(password) { char_types += 1; }
-        if self.has_capital_letters(password) { char_types += 1; }
-        if self.has_numbers(password) { char_types += 1; }
-        if self.has_special_chars(password) { char_types += 1; }
+        if self.has_small_letters(password) {
+            char_types += 1;
+        }
+        if self.has_capital_letters(password) {
+            char_types += 1;
+        }
+        if self.has_numbers(password) {
+            char_types += 1;
+        }
+        if self.has_special_chars(password) {
+            char_types += 1;
+        }
 
         if char_types < 2 {
             return Strength::Weak;
@@ -145,10 +149,7 @@ mod tests {
         assert_eq!(Strength::Medium, checker.check("ABCD1234"));
         assert_eq!(Strength::Medium, checker.check("ABCD!@#$"));
         assert_eq!(Strength::Medium, checker.check("1234!@#$"));
-        assert_eq!(
-            Strength::Medium,
-            checker.check("S0meL0ngP4ssw0rd")
-        );
+        assert_eq!(Strength::Medium, checker.check("S0meL0ngP4ssw0rd"));
     }
 
     #[test]
@@ -159,10 +160,7 @@ mod tests {
         assert_eq!(Strength::Medium, checker.check("abcDEF!@"));
         assert_eq!(Strength::Medium, checker.check("ABC123!@"));
         assert_eq!(Strength::Medium, checker.check("abc123!@"));
-        assert_eq!(
-            Strength::Medium,
-            checker.check("S0meStr0ngPassw0rd")
-        );
+        assert_eq!(Strength::Medium, checker.check("S0meStr0ngPassw0rd"));
     }
 
     /* Strong passwords */
@@ -174,9 +172,6 @@ mod tests {
         assert_eq!(Strength::Strong, checker.check("12345aA!"));
         assert_eq!(Strength::Strong, checker.check("abcdeT7*"));
         assert_eq!(Strength::Strong, checker.check("QWERTy6^"));
-        assert_eq!(
-            Strength::Strong,
-            checker.check("S0meL0n(P@ssWORD")
-        );
+        assert_eq!(Strength::Strong, checker.check("S0meL0n(P@ssWORD"));
     }
 }
